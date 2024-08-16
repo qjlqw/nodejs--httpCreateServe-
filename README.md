@@ -9,15 +9,23 @@
 
 #### 安装教程
 
-1.  git init
-2.  git clone 
-3.  xxxx
+1.  git init；
+2.  git clone https://gitee.com/qinjianlin/nodejs.git；
+
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  文件目录
+    node
+    |
+    | -- api (里面有两级文件，一级文件是分类，二级文件请求函数的集合)
+    |
+    | -- html       示例文件
+    | -- node.js    入口文件
+    | -- package.js 配置文件
+    | -- router.js  对接口路由请求统一处理分发
+    | -- serve.js   请求头请求体响应头响应体封装，链接数据库
+2.  打开文件使用npm i下载依赖，node node.js即可启动服务。
 
 #### 参与贡献
 
