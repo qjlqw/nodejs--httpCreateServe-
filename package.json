@@ -1,0 +1,8 @@
+{
+	"name": "hellow",
+	"version": "0.0.0",
+	"dependencies": {
+		"express": "^4.19.2",
+		"mysql": "^2.18.1"
+	}
+}
