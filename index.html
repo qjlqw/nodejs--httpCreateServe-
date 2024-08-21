@@ -4,17 +4,53 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
+		<style>
+			.bottom {
+				width: 100%;
+				display: flex;
+				align-items: baseline;
+			}
+			.title {
+				font-size: 12px;
+				color:rgba(31, 143, 255, .9);
+				margin-left: 6px;
+				cursor: pointer;
+			}
+			#Form,#myForm {
+				width: fit-content;
+				margin: 0 auto;
+			}
+			#Form {
+				display: none;
+			}
+			.MetaTitle {
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
-		<form id="myForm" action="http://127.0.0.1:5174/loginIN" method="post" enctype="application/x-www-form-urlencoded" target="_self">
+		<h1 class="MetaTitle">登录</h1>
+		<div class="login">
+			<form id="myForm" action="http://127.0.0.1:5174/loginIN" method="post" enctype="application/x-www-form-urlencoded" target="_self">
+				<input type="text" name="username" value="admin" id="username" />
+				<br />
+				<input type="password" name="password" value="admin" id="password" />
+				<br />
+				<div class="bottom">
+					<input type="submit" value="登录" />
+					<div onclick="login()" class="title">还没有账号？点击注册</div>
+				</div>
+			</form>
+		</div>
+
+		<form id="Form" action="http://127.0.0.1:5174/register" method="get" enctype="application/x-www-form-urlencoded" target="_self">
 			<input type="text" name="username" value="admin" id="username" />
+			<br />
 			<input type="password" name="password" value="admin" id="password" />
-			<input type="submit" value="提交" />
-		</form>
-		<form id="Form" action="http://127.0.0.1:5174/loginIN" method="get" enctype="application/x-www-form-urlencoded" target="_self">
-			<input type="text" name="username" value="admin" id="username" />
-			<input type="password" name="password" value="admin" id="password" />
-			<input type="submit" value="提交" />
+			<br />
+			<div class="bottom">
+				<input type="submit" value="注册" />
+			</div>
 		</form>
 		<script type="text/javascript">
 			document.getElementById('myForm').addEventListener('submit', function (event) {
@@ -46,17 +82,17 @@
 			 document.getElementById('Form').addEventListener('submit', function (event) {
 			   event.preventDefault();
 			   const formData = new FormData(this);
-			   const jsonDataParts = [];
+			    const jsonData = {};
 
 			   for (const [key, value] of formData.entries()) {
-			     jsonDataParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+			     jsonData[key] = value;
 			   }
-				 const jsonData = jsonDataParts.join('&');
-			      fetch(`http://127.0.0.1:5174/loginIN?${jsonData}`,{
-			       method:'get',
+			      fetch(`http://127.0.0.1:5174/register`,{
+			       method:'post',
 			       headers:{
 			         'Content-Type':'application/json'
 			       },
+						 body:JSON.stringify(jsonData)
 			      }).then(Response => {
 			            console.log(Response)
 									return Response.json()
@@ -69,6 +105,11 @@
 
 			   console.log(jsonData);
 			 });
+			function login() {
+				document.getElementsByClassName('MetaTitle')[0].innerHTML = '注册'
+				document.getElementsByClassName('login')[0].style.display = 'none'
+				document.getElementById('Form').style.display = 'block'
+			}
 		</script>
 	</body>
 </html>

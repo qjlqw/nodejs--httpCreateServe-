@@ -46,15 +46,22 @@ function loginlog(query) {
 	})
 }
 
-async function get(request) {
-	let result = await routerDir()
-	let fun = await processRouters(result, url.parse(request.url).pathname)
-	const functionName = fun[0]
-	const query = URLObject(url.parse(request.url).query)
-	functionName(query)
-	// 日志
-	loginlog(query)
-	return fun[0]
+function get(request) {
+	return new Promise(async (resolve, reject) => {
+		let result = await routerDir()
+		let fun = await processRouters(result, url.parse(request.url).pathname)
+		const functionName = fun[0]
+		const query = URLObject(url.parse(request.url).query)
+		await functionName(query)
+			.then((res) => {
+				resolve(res)
+			})
+			.catch((err) => {
+				reject(err)
+			})
+		// 日志
+		loginlog(query)
+	})
 }
 function post(request) {
 	return new Promise((resolve, reject) => {
@@ -69,8 +76,13 @@ function post(request) {
 			let result = await routerDir()
 			let fun = await processRouters(result, url.parse(request.url).pathname)
 			const functionName = fun[0]
-			const val_ = await functionName(JSON.parse(body))
-			resolve(val_)
+			await functionName(JSON.parse(body))
+				.then((res) => {
+					resolve(res)
+				})
+				.catch((err) => {
+					reject(err)
+				})
 		})
 	})
 }

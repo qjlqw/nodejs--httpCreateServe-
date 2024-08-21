@@ -3,6 +3,12 @@ const path = require('path')
 const util = require('util')
 const readdir = util.promisify(fs.readdir)
 const stat = util.promisify(fs.stat)
+const crypto = require('crypto')
+
+// 生成MD5签名
+function generateMD5Signature(data) {
+	return crypto.createHash('md5').update(data).digest('hex')
+}
 
 /**
  * 读取api目录获取路由api列表
@@ -69,3 +75,4 @@ async function processRouters(result, url) {
 
 exports.processRouters = processRouters
 exports.routerDir = routerDir
+exports.generateMD5Signature = generateMD5Signature
