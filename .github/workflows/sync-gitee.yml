@@ -15,7 +15,7 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config --global user.name 'qjl'
+          git config --global user.name 'qjlqw'
           git config --global user.email '3056554231@qq.com'
 
       - name: Pull from Gitee
