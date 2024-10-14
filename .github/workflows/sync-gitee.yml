@@ -1,0 +1,31 @@
+name: Sync Gitee to GitHub
+
+on:
+  push:
+    branches:
+      - main  # 监听 Gitee 的主分支或你需要的其他分支
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout GitHub Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'qjl'
+          git config --global user.email '3056554231@qq.com'
+
+      - name: Pull from Gitee
+        run: |
+          git remote add gitee https://gitee.com/qinjianlin/nodejs.git
+          git fetch gitee
+          git pull gitee master  # 使用你需要的分支
+
+      - name: Push to GitHub
+        run: |
+          git push origin main  # 使用你需要的分支
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
