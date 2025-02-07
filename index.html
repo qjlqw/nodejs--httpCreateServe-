@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>首页</title>
+    <style>
+      .bottom {
+        width: 100%;
+        display: flex;
+        align-items: baseline;
+      }
+      .title {
+        font-size: 12px;
+        color: rgba(31, 143, 255, 0.9);
+        margin-left: 6px;
+        cursor: pointer;
+      }
+      #regist,
+      #login {
+        width: fit-content;
+        margin: 0 auto;
+      }
+      #regist {
+        display: none;
+      }
+      .MetaTitle {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="MetaTitle">登录</h1>
+    <div class="login">
+      <form
+        id="login"
+        action="http://127.0.0.1:5174/loginIN"
+        method="post"
+        enctype="application/x-www-form-urlencoded"
+        target="_self"
+      >
+        <input type="text" name="username" value="admin" id="username" />
+        <br />
+        <input type="password" name="password" value="admin" id="password" />
+        <br />
+        <div class="bottom">
+          <input type="submit" value="登录" />
+          <div onclick="login()" class="title">还没有账号？点击注册</div>
+        </div>
+      </form>
+    </div>
+
+    <form
+      id="regist"
+      action="http://127.0.0.1:5174/register"
+      method="get"
+      enctype="application/x-www-form-urlencoded"
+      target="_self"
+    >
+      <input type="text" name="username" value="admin" id="username" />
+      <br />
+      <input type="password" name="password" value="admin" id="password" />
+      <br />
+      <div class="bottom">
+        <input type="submit" value="注册" />
+      </div>
+    </form>
+    <script type="text/javascript">
+      document
+        .getElementById("login")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          const jsonData = {};
+
+          for (const [key, value] of formData.entries()) {
+            jsonData[key] = value;
+          }
+          console.log(jsonData);
+
+          fetch(`http://127.0.0.1:5174/loginIN`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonData),
+          })
+            .then((Response) => {
+              console.log(Response);
+              return Response.json();
+            })
+            .then((data) => {
+              console.log(data);
+              if (data.code === 1) {
+                window.parent.postMessage("login", "*");
+                sessionStorage.setItem("Admin-token", data.data);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      document
+        .getElementById("regist")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          const jsonData = {};
+
+          for (const [key, value] of formData.entries()) {
+            jsonData[key] = value;
+          }
+          fetch(`http://127.0.0.1:5174/register`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonData),
+          })
+            .then((Response) => {
+              console.log(Response);
+              return Response.json();
+            })
+            .then((data) => {
+              console.log(data);
+              if (data.code === 1) {
+                window.alert("注册成功!前往登录");
+                document.getElementsByClassName("MetaTitle")[0].innerHTML =
+                  "登录";
+                document.getElementsByClassName("login")[0].style.display =
+                  "block";
+                document.getElementById("regist").style.display = "none";
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          console.log(jsonData);
+        });
+      function login() {
+        document.getElementsByClassName("MetaTitle")[0].innerHTML = "注册";
+        document.getElementsByClassName("login")[0].style.display = "none";
+        document.getElementById("regist").style.display = "block";
+      }
+    </script>
+  </body>
+</html>
